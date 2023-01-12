@@ -4,7 +4,7 @@ import { getWeather } from '../../async/getWeather';
 
 export type WeatherState = {
   status: string | null;
-  weather: WeatherResponse[] | null;
+  weather: WeatherResponse | null;
   isMounted: boolean;
 };
 
@@ -18,7 +18,7 @@ const weatherSlice = createSlice({
   name: 'weather',
   initialState,
   reducers: {
-    setWeather(state, action: PayloadAction<WeatherResponse[]>) {
+    setWeather(state, action: PayloadAction<WeatherResponse>) {
       state.weather = action.payload;
     },
   },

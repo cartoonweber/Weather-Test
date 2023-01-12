@@ -15,11 +15,10 @@ export type WeatherResponse = {
   humidity: string,
   windSpeed: string,
   weatherDescription: string,
-  weatherIconCode: string,
+  weatherLogo: string,
   displayTime: string,
   searchStatus: any,
   isSearching: boolean,
   forecast: string,
-  zoneName: string,
   loaded: true
 };

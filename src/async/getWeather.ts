@@ -15,34 +15,31 @@ export const getWeather = createAsyncThunk(
       const { isMounted } = weather;
       if (!isMounted) {
         if (typeof coord === 'object') {
-          const url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${coord.latitude}&lon=${coord.longitude}&days=7&key=fe96c2667f92472faf31bb323c0bb2cc`;
-          console.log(url);
+          const url = `http://api.weatherapi.com/v1/forecast.json?key=c07f151caa674342a3152328231201&q=${coord.latitude},${coord.longitude}&days=7`;
           const response = await axios.get(
             url
           );
+          console.log(response.data);
           const weather = response.data;
-          let temp: WeatherResponse[] = [];
-          for (let i = 0; i < weather.data.length; i++) {
-            temp.push({
-              city: weather.city_name,
-              country: weather.country_code,
-              lat: weather.lat,
-              lon: weather.lon,
-              tempCelcius: Math.round(weather.data[i].temp),
-              tempFahrenheit: Math.round((weather.data[i].temp * (9 / 5)) + 32),
-              weather: weather.data[i].weather.description,
-              humidity: weather.data[i].rh,
-              windSpeed: weather.data[i].wind_spd.toFixed(2),
-              weatherDescription: weather.data[i].weather.description,
-              weatherIconCode: weather.data[i].weather.icon,
-              displayTime: weather.timezone ? moment().tz(weather.timezone).format('LLLL') : '',
-              searchStatus: undefined,
-              isSearching: false,
-              forecast: weather.data,
-              zoneName: weather.timezone,
-              loaded: true
-            })
+          let temp: WeatherResponse = {
+            city: weather.location.name,
+            country: weather.location.country,
+            lat: weather.location.lat,
+            lon: weather.location.lon,
+            tempCelcius: Math.round(weather.current.temp_c),
+            tempFahrenheit: Math.round(weather.current.temp_f),
+            weather: weather.current.condition.text,
+            humidity: weather.current.humidity,
+            windSpeed: weather.current.wind_kph,
+            weatherDescription: weather.current.condition.text,
+            weatherLogo: weather.current.condition.icon,
+            displayTime: weather.current.last_updated,
+            searchStatus: undefined,
+            isSearching: false,
+            forecast: weather.forecast.forecastday,
+            loaded: true
           }
+          console.log(temp);
           if (temp) {
             return temp;
           } else {
@@ -50,31 +47,29 @@ export const getWeather = createAsyncThunk(
           }
         }
       } else {
+        console.log(coord);
         const response = await axios.get(
-          `https://api.weatherbit.io/v2.0/forecast/daily?city=${coord}&days=7&key=fe96c2667f92472faf31bb323c0bb2cc`
+          `http://api.weatherapi.com/v1/forecast.json?key=c07f151caa674342a3152328231201&q=${coord}&days=7`
         );
         const weather = response.data;
-        let temp: WeatherResponse[] = [];
-        for (let i = 0; i < weather.data.length; i++) {
-          temp.push({
-            city: weather.city_name,
-            country: weather.country_code,
-            lat: weather.lat,
-            lon: weather.lon,
-            tempCelcius: Math.round(weather.data[i].temp),
-            tempFahrenheit: Math.round((weather.data[i].temp * (9 / 5)) + 32),
-            weather: weather.data[i].weather.description,
-            humidity: weather.data[i].rh,
-            windSpeed: weather.data[i].wind_spd.toFixed(2),
-            weatherDescription: weather.data[i].weather.description,
-            weatherIconCode: weather.data[i].weather.icon,
-            displayTime: weather.timezone ? moment().tz(weather.timezone).format('LLLL') : '',
-            searchStatus: undefined,
-            isSearching: false,
-            forecast: weather.data,
-            zoneName: weather.timezone,
-            loaded: true
-          })
+        console.log(weather);
+        let temp: WeatherResponse = {
+          city: weather.location.name,
+          country: weather.location.country,
+          lat: weather.location.lat,
+          lon: weather.location.lon,
+          tempCelcius: Math.round(weather.current.temp_c),
+          tempFahrenheit: Math.round(weather.current.temp_f),
+          weather: weather.current.condition.text,
+          humidity: weather.current.humidity,
+          windSpeed: weather.current.wind_kph,
+          weatherDescription: weather.current.condition.text,
+          weatherLogo: weather.current.condition.icon,
+          displayTime: weather.current.last_updated,
+          searchStatus: undefined,
+          isSearching: false,
+          forecast: weather.forcast.forcastday,
+          loaded: true
         }
         if (temp) {
           return temp;
@@ -83,6 +78,7 @@ export const getWeather = createAsyncThunk(
         }
       }
     } catch (error: any) {
+      console.log(error);
       return rejectWithValue('rejected');
     }
   }
