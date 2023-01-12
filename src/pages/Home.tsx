@@ -8,6 +8,7 @@ import { weatherbitIcons } from "../helpers/getIcon";
 import styled from "styled-components";
 import DailyInfoCard from "./DailyInfoCard";
 import PerformanceChart from "./PerformanceChart";
+import useRefresh from "../hooks/useRefresh";
 
 type IHome = {
   theme: boolean;
@@ -21,24 +22,21 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
   const [chartData, setChartData] = React.useState([]);
   const dispatch = useAppDispatch();
   const { weather } = useAppSelector((state) => state.weather);
+  const { fastRefresh } = useRefresh();
   // const { savedWeather } = useAppSelector((state) => state.saved);
   // const findWeather = savedWeather.find((el) => {
   //   if (el.name === (weather?.name as string)) {
   //     return true;
   //   }
   // });
-  const searchHandler = React.useCallback(
-    debounce((e) => {
-      dispatch(getWeather(e));
-    }, 1000),
-    []
-  );
+
+  useEffect(() => {
+    dispatch(getWeather(value));
+  }, [fastRefresh, value]);
+
   const onChangeInput = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
-    searchHandler(e.target.value);
   }, []);
-
-  console.log(weather);
 
   useEffect(() => {
     if (!weather) return;
@@ -54,7 +52,7 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
 
   return (
     <main className={theme ? "dark" : ""}>
-      <div className="font-bold text-gray-100  max-w-screen-xl mx-auto px-4 lg:px-6 flex flex-col items-center py-10">
+      <div className="font-bold text-gray-100  max-w-screen-xl mx-auto px-3 lg:px-6 flex flex-col items-center py-10">
         <div className="w-[300px]">
           <Input theme={theme} value={value} onChangeInput={onChangeInput} />
         </div>
@@ -63,10 +61,10 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
           <div>
             <Weather>
               <WeatherWrapper>
-                {/* <img src={weather.weatherLogo} alt={""} className={"min-w-[120px]"} /> */}
-                <img src={"/climate.webp"} alt={""} className={"min-w-[120px]"} />
+                <img src={weather.weatherLogo} alt={""} className={"min-w-[120px]"} />
+                {/* <img src={"/climate.webp"} alt={""} className={"min-w-[120px]"} /> */}
                 <div className="relative text-right">
-                  <h1 className="text-[48px] font-bold my-6">
+                  <h1 className="font-bold my-6">
                     {isCelcius ? `${weather.tempCelcius} °C` : `${weather.tempFahrenheit} °F`}
                   </h1>
                   <TemperatureToggle
@@ -109,7 +107,7 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
               />
             </div>
             <div className="mt-8">
-              <div className="flex justify-end text-2xl ">{weather.forecast[chartIndex].date}</div>
+              <div className="flex justify-end text-2xl">{weather.forecast[chartIndex].date}</div>
               <div style={{ marginTop: "-15px" }}>
                 <PerformanceChart data={chartData} />
               </div>
@@ -129,28 +127,32 @@ const WeatherWrapper = styled.div`
   padding: 0 80px;
   text-align: center;
   position: relative;
-
-  @media (max-width: 500px) {
-    padding-left: 0;
-    padding-right: 16px;
+  > div > h1 {
+    font-size: 48px;
   }
 
-  @media (max-width: 300px) {
-    padding: 0;
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
+  @media (max-width: 600px) {
+    padding-left: 0;
+    padding-right: 16px;
+    > div > h1 {
+      font-size: 36px;
+    }
+    > img {
+      min-width: 100px;
+    }
   }
 `;
 
 const Weather = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-top: 60px;
   transition: all 0.5s;
 
-  @media (max-width: 300px) {
+  @media (max-width: 400px) {
     flex-direction: column;
+    margin-top: 30px;
   }
 
   i {
@@ -169,7 +171,6 @@ const Location = styled.div`
   display: flex;
   align-items: center;
   font-size: 1.5em;
-
   @media (max-width: 300px) {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
@@ -181,13 +182,12 @@ const Location = styled.div`
   }
 
   h2 {
-    @media (max-width: 300px) {
+    @media (max-width: 600px) {
       font-size: 20px;
     }
   }
 `;
 const TemperatureInfo = styled.div`
-  flex-grow: 1;
   margin-bottom: 16px;
   position: relative;
   padding-left: 48px;
@@ -196,12 +196,14 @@ const TemperatureInfo = styled.div`
     span {
       font-weight: normal;
       margin-right: 12px;
+      @media (max-width: 600px) {
+        font-size: 13px;
+      }
     }
   }
 
-  @media (max-width: 300px) {
-    width: 100%;
-    padding-left: 0;
+  @media (max-width: 600px) {
+    font-size: 13px;
   }
 `;
 

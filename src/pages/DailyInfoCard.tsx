@@ -25,8 +25,8 @@ const DailyInfoCard = ({ data, isCelcius, index, setIndex }: any) => {
               onClick={() => setIndex(index)}
             >
               <h5 className="forecast-date">{day[dayCode]}</h5>
-              {/* <img src={data.day.condition.icon} alt={""} /> */}
-              <img src={'/climate.webp'} alt={""} />
+              <img src={data.day.condition.icon} alt={""} />
+              {/* <img src={"/climate.webp"} alt={""} /> */}
               <h2 className="forecast-temp">
                 {isCelcius ? data.day.avgtemp_c : Math.round(data.day.avgtemp_c * (9 / 5) + 32)}
                 <span>°</span>
@@ -44,6 +44,10 @@ const StyledItem = styled.div`
   :hover {
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+  }
+  @media screen and (max-width: 450px) {
+    padding: 5px 10px;
+    font-size: 12px;
   }
 `;
 
