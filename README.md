@@ -15,6 +15,6 @@
 # Contact
 
 - GitHub: [Cartoonweber](https://github.com/cartoonweber)
-- Telegram: @onChin999
+- Telegram: [@onChin999](https://github.com/onChin999)
 
 Give a ⭐️ if you like this project!
