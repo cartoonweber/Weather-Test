@@ -1,5 +1,5 @@
 import React from "react";
-import { Cart } from "../components/Cart";
+// import { Cart } from "../components/Cart";
 import { useAppSelector } from "../hooks/hooks";
 
 type IHistory = {
@@ -17,9 +17,9 @@ const History: React.FC<IHistory> = ({ theme }) => {
           ""
         )}
 
-        {savedWeather.map((weather, i) => {
+        {/* {savedWeather.map((weather, i) => {
           return <Cart index={i} key={weather.name} name={weather.name} />;
-        })}
+        })} */}
       </div>
     </main>
   );

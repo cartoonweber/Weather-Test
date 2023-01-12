@@ -9,77 +9,70 @@ import cloudy from '../assets/icons/fewclouds.svg';
 import brkclouds from '../assets/icons/brkclouds.svg';
 import overclouds from '../assets/icons/overclouds.svg';
 
-const drizzleW = {
-  drizzleI: [300, 301, 302, 310, 311, 312, 313, 314, 321],
-  icon: drizzle,
+export const weatherbitIcons: any = {
+  a01d: 'wi-day-cloudy-windy',
+  a01n: 'wi-night-alt-cloudy-windy',
+  a02d: 'wi-day-cloudy-windy',
+  a02n: 'wi-night-alt-cloudy-windy',
+  a03d: 'wi-day-cloudy-windy',
+  a03n: 'wi-night-alt-cloudy-windy',
+  a04d: 'wi-day-cloudy-windy',
+  a04n: 'wi-night-alt-cloudy-windy',
+  a05d: 'wi-day-cloudy-windy',
+  a05n: 'wi-night-alt-cloudy-windy',
+  a06d: 'wi-day-cloudy-windy',
+  a06n: 'wi-night-alt-cloudy-windy',
+  c01d: 'wi-day-sunny',
+  c01n: 'wi-night-clear',
+  c02d: 'wi-day-cloudy',
+  c02n: 'wi-night-partly-cloudy',
+  c03d: 'wi-night-alt-cloudy',
+  c03n: 'wi-night-cloudy',
+  c04d: 'wi-cloudy',
+  c04n: 'wi-cloudy',
+  d01d: 'wi-day-showers',
+  d01n: 'wi-night-alt-rain-mix',
+  d02d: 'wi-day-snow-wind',
+  d02n: 'wi-night-alt-rain-wind',
+  d03d: 'wi-day-snow',
+  d03n: 'wi-night-alt-snow',
+  f01d: 'wi-day-light-wind',
+  f01n: 'wi-night-cloudy-windy',
+  r01d: 'wi-day-rain-wind',
+  r01n: 'wi-night-alt-rain-wind',
+  r02d: 'wi-day-cloudy-windy',
+  r02n: 'wi-night-rain-wind',
+  r03d: 'wi-day-cloudy-gusts',
+  r03n: 'wi-night-alt-cloudy-gusts',
+  r04d: 'wi-cloudy-gusts',
+  r04n: 'wi-night-rain-mix',
+  r05d: 'wi-day-rain-mix',
+  r05n: 'wi-night-rain-mix',
+  r06d: 'wi-rain',
+  r06n: 'wi-night-rain-mix',
+  s01d: 'wi-day-snow',
+  s01n: 'wi-night-snow',
+  s02d: 'wi-snow',
+  s02n: 'wi-snow',
+  s03d: 'wi-snow',
+  s03n: 'wi-snow',
+  s04d: 'wi-day-snow',
+  s04n: 'wi-night-snow',
+  s05d: 'wi-day-cloudy-gusts',
+  s05n: 'wi-night-alt-cloudy-gusts',
+  s06d: 'wi-snow',
+  s06n: 'wi-snow',
+  t01d: 'wi-day-thunderstorm',
+  t01n: 'wi-night-thunderstorm',
+  t02d: 'wi-day-thunderstorm',
+  t02n: 'wi-night-thunderstorm',
+  t03d: 'wi-day-thunderstorm',
+  t03n: 'wi-night-thunderstorm',
+  t04d: 'wi-lightning',
+  t04n: 'wi-night-alt-lightning',
+  t05d: 'wi-lightning',
+  t05n: 'wi-night-alt-lightning',
+  u00d: 'wi-cloudy-windy',
+  u00n: 'wi-cloudy-windy'
 };
 
-const thunderstormW = {
-  thunderstormI: [200, 201, 202, 210, 211, 212, 221, 230, 231, 232],
-  icon: thunderstorm,
-};
-
-const rainW = {
-  rainI: [500, 501, 502, 503, 504, 511, 520, 521, 522, 531],
-  icon: rain,
-};
-
-const snowW = {
-  snowI: [600, 601, 602, 611, 612, 613, 615, 616, 620, 621, 622],
-  icon: snow,
-};
-
-const atmosphereW = {
-  atmosphereI: [701, 711, 721, 731, 741, 751, 761, 762, 771, 781],
-  icon: atmosphere,
-};
-
-const clearW = {
-  clearI: [800],
-  icon: clear,
-};
-
-const fewcloudsW = {
-  fewcloudsI: [801],
-  icon: fewclouds,
-};
-
-const cloudsW = {
-  cloudsI: [802],
-  icon: cloudy,
-};
-
-const brkcloudsW = {
-  brkcloudsI: [803],
-  icon: brkclouds,
-};
-
-const overCloudsW = {
-  overCloudsI: [804],
-  icon: overclouds,
-};
-const getIcon = (id: number) => {
-  if (thunderstormW.thunderstormI.includes(id)) {
-    return thunderstormW.icon;
-  } else if (drizzleW.drizzleI.includes(id)) {
-    return drizzleW.icon;
-  } else if (rainW.rainI.includes(id)) {
-    return rainW.icon;
-  } else if (snowW.snowI.includes(id)) {
-    return snowW.icon;
-  } else if (atmosphereW.atmosphereI.includes(id)) {
-    return atmosphereW.icon;
-  } else if (clearW.clearI.includes(id)) {
-    return clearW.icon;
-  } else if (fewcloudsW.fewcloudsI.includes(id)) {
-    return fewcloudsW.icon;
-  } else if (cloudsW.cloudsI.includes(id)) {
-    return cloudsW.icon;
-  } else if (brkcloudsW.brkcloudsI.includes(id)) {
-    return brkcloudsW.icon;
-  } else if (overCloudsW.overCloudsI.includes(id)) {
-    return overCloudsW.icon;
-  }
-};
-
-export default getIcon;
