@@ -1,5 +1,5 @@
 import React from "react";
-import icon from ".././assets/icons/icon.svg";
+import icon from ".././assets/icons/logo.svg";
 import { SlSocialGithub } from "react-icons/sl";
 import { TbSun, TbSunOff } from "react-icons/tb";
 import { FaHome } from "react-icons/fa";
@@ -29,7 +29,7 @@ export const Header: React.FC<IHeader> = ({ theme, setTheme }) => {
     <header className={theme ? "dark sticky top-0" : "sticky top-0"}>
       <div className="dark:bg-[#1F2937] bg-[#fefefe] drop-shadow-md">
         <nav className=" flex items-center justify-between mx-auto max-w-screen-xl px-4 lg:px-6 py-2.5">
-          <div className="flex items-center min-w-[160px]">
+          <div className="flex items-center ">
             <NavLink to="/">
               <img className="mr-6 h-10" src={icon} alt="" />
             </NavLink>
