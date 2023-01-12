@@ -2,6 +2,8 @@
 
 # Vercel
 
+https://weather-test-rust.vercel.app/
+
 # Install
 
 `yarn install && yarn start`
