@@ -15,7 +15,7 @@ export const getWeather = createAsyncThunk(
       const { weather } = state as { weather: WeatherState };
       const { isMounted } = weather;
       if (typeof coord === "object") {
-        const url = `http://api.weatherapi.com/v1/forecast.json?key=c07f151caa674342a3152328231201&q=${coord.latitude},${coord.longitude}&days=7`;
+        const url = `https://api.weatherapi.com/v1/forecast.json?key=c07f151caa674342a3152328231201&q=${coord.latitude},${coord.longitude}&days=7`;
         const response = await axios.get(url);
         const weather = response.data;
         // const weather = templateJSON;
@@ -45,7 +45,7 @@ export const getWeather = createAsyncThunk(
       }
       else {
         const response = await axios.get(
-          `http://api.weatherapi.com/v1/forecast.json?key=c07f151caa674342a3152328231201&q=${coord}&days=7`
+          `https://api.weatherapi.com/v1/forecast.json?key=c07f151caa674342a3152328231201&q=${coord}&days=7`
         );
         const weather = response.data;
         // const weather = templateJSON;

@@ -1,12 +1,8 @@
 import React from "react";
 import icon from ".././assets/icons/logo.svg";
 import { SlSocialGithub } from "react-icons/sl";
-import { TbSun, TbSunOff } from "react-icons/tb";
 import { FaHome } from "react-icons/fa";
-import { VscLibrary } from "react-icons/vsc";
-import Modal from "./Modal";
 import { NavLink, useLocation } from "react-router-dom";
-import { CustomLink } from "./CustomLink";
 
 type IHeader = {
   theme: boolean;
@@ -109,7 +105,6 @@ export const Header: React.FC<IHeader> = ({ theme, setTheme }) => {
           </div>
         )}
       </div>
-      <Modal theme={theme} isVisible={isVisible} setVisible={setVisible} />
     </header>
   );
 };
