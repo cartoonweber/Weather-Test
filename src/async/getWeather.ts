@@ -16,24 +16,25 @@ export const getWeather = createAsyncThunk(
       if (!isMounted) {
         if (typeof coord === 'object') {
           const url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${coord.latitude}&lon=${coord.longitude}&days=7&key=fe96c2667f92472faf31bb323c0bb2cc`;
+          console.log(url);
           const response = await axios.get(
             url
           );
           const weather = response.data;
           let temp: WeatherResponse[] = [];
-          for (let i = 0; i < weather.length; i++) {
+          for (let i = 0; i < weather.data.length; i++) {
             temp.push({
               city: weather.city_name,
               country: weather.country_code,
               lat: weather.lat,
               lon: weather.lon,
-              tempCelcius: Math.round(weather.data[0].temp),
-              tempFahrenheit: Math.round((weather.data[0].temp * (9 / 5)) + 32),
-              weather: weather.data[0].weather.description,
-              humidity: weather.data[0].rh,
-              windSpeed: weather.data[0].wind_spd.toFixed(2),
-              weatherDescription: weather.data[0].weather.description,
-              weatherIconCode: weather.data[0].weather.icon,
+              tempCelcius: Math.round(weather.data[i].temp),
+              tempFahrenheit: Math.round((weather.data[i].temp * (9 / 5)) + 32),
+              weather: weather.data[i].weather.description,
+              humidity: weather.data[i].rh,
+              windSpeed: weather.data[i].wind_spd.toFixed(2),
+              weatherDescription: weather.data[i].weather.description,
+              weatherIconCode: weather.data[i].weather.icon,
               displayTime: weather.timezone ? moment().tz(weather.timezone).format('LLLL') : '',
               searchStatus: undefined,
               isSearching: false,
@@ -54,19 +55,19 @@ export const getWeather = createAsyncThunk(
         );
         const weather = response.data;
         let temp: WeatherResponse[] = [];
-        for (let i = 0; i < weather.length; i++) {
+        for (let i = 0; i < weather.data.length; i++) {
           temp.push({
             city: weather.city_name,
             country: weather.country_code,
             lat: weather.lat,
             lon: weather.lon,
-            tempCelcius: Math.round(weather.data[0].temp),
-            tempFahrenheit: Math.round((weather.data[0].temp * (9 / 5)) + 32),
-            weather: weather.data[0].weather.description,
-            humidity: weather.data[0].rh,
-            windSpeed: weather.data[0].wind_spd.toFixed(2),
-            weatherDescription: weather.data[0].weather.description,
-            weatherIconCode: weather.data[0].weather.icon,
+            tempCelcius: Math.round(weather.data[i].temp),
+            tempFahrenheit: Math.round((weather.data[i].temp * (9 / 5)) + 32),
+            weather: weather.data[i].weather.description,
+            humidity: weather.data[i].rh,
+            windSpeed: weather.data[i].wind_spd.toFixed(2),
+            weatherDescription: weather.data[i].weather.description,
+            weatherIconCode: weather.data[i].weather.icon,
             displayTime: weather.timezone ? moment().tz(weather.timezone).format('LLLL') : '',
             searchStatus: undefined,
             isSearching: false,

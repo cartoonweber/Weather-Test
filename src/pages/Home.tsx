@@ -4,20 +4,19 @@ import { Input } from "../components/Input";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { getWeather } from "../async/getWeather";
 import { debounce } from "lodash";
-import getIcon from "../helpers/getIcon";
-import getTempIcon from "../helpers/getTemp";
-import { addWeather } from "../store/slices/savedSlice";
-import { IsSaved } from "../components/IsSaved";
+import { weatherbitIcons } from "../helpers/getIcon";
 
 type IHome = {
   theme: boolean;
+  countryCodes: any;
 };
 
-const Home: React.FC<IHome> = ({ theme }) => {
+const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
   const [value, setValue] = React.useState<string>("");
+  const [isCelcius, setIsCelcius] = React.useState(false);
   const dispatch = useAppDispatch();
   const { weather } = useAppSelector((state) => state.weather);
-  const { savedWeather } = useAppSelector((state) => state.saved);
+  // const { savedWeather } = useAppSelector((state) => state.saved);
   // const findWeather = savedWeather.find((el) => {
   //   if (el.name === (weather?.name as string)) {
   //     return true;
@@ -40,48 +39,50 @@ const Home: React.FC<IHome> = ({ theme }) => {
     <main className={theme ? "dark" : ""}>
       <div className="text-gray-100  max-w-screen-xl mx-auto px-4 lg:px-6 flex flex-col items-center py-10">
         <Input theme={theme} value={value} onChangeInput={onChangeInput} />
-        {weather &&
-          weather?.map((data: any, i: any) => {
-            return (
-              <>
-                <img className="h-40" src={getIcon(data?.weather[0].id ? data?.weather[0].id : 800)} alt="" />
-                <span className="text-5xl dark:text-white text-gray-700 mb-5 font-bold flex items-center justify-center">
-                  <img className="h-20 mr-3" src={getTempIcon(Math.ceil(data?.main.temp ? data.main.temp : 0))} alt="" />
-                  {Math.ceil(data?.main.temp ? data.main.temp : 0)}°C
-                </span>
-                <span className="mb-5 font-semibold dark:text-white text-gray-700">
-                  <span className="text-2xl ">{data?.name}, </span>
-                  <span className="uppercase text-2xl">{data?.sys.country}</span>
-                </span>
-                <ul className="flex flex-col sm:flex-row items-center mb-6 space-y-2 sm:space-y-0 dark:text-white text-gray-700">
-                  <li className='sm:after:content-["•"] sm:after:mx-3 after:opacity-70'>
-                    <span className="font-bold">Feels like: </span>
-                    <span>
-                      {Math.ceil(data?.main.feels_like ? data?.main.feels_like : 0)}
-                      °C
-                    </span>
-                  </li>
-                  <li className='sm:after:content-["•"] sm:after:mx-3 after:opacity-70'>
-                    <span className="font-bold">Humidity:</span> <span>{data?.main.humidity}%</span>
-                  </li>
-                  <li className="">
-                    <span className="font-bold">Info:</span> <span>{data?.weather[0].main}</span>
-                  </li>
-                </ul>
-              </>
-            );
-          })}
 
-        {/* <button
-          className="
-            dark:text-white bg-gray-200 hover:bg-gray-300 text-gray-700 dark:hover:bg-[#0e48c5]
-            dark:bg-[#1956db] transition-all focus:ring-2 focus:ring-gray-400 font-medium rounded px-3 lg:px-4 py-1.5 lg:py-2 focus:outline-none ml-2"
-          onClick={() => {
-            dispatch(addWeather(weather?.name as string));
-          }}
-        >
-          <IsSaved weather={weather} />
-        </button> */}
+        {weather && weather.length ? (
+          <>
+            <i className={`wi ${weatherbitIcons[weather[0].weatherIconCode]} text-[210px]`} />
+            <div className="temperature-control">
+              <h1 className="weather-temp">{isCelcius ? `${weather[0].tempCelcius} °C` : `${weather[0].tempFahrenheit} °F`}</h1>
+              <div
+                className="temperature-toggle"
+                style={{
+                  color: isCelcius ? "rgba(255, 255, 255, .7)" : "#adff2f",
+                }}
+                onClick={() => setIsCelcius(!isCelcius)}
+              >
+                <span>{isCelcius ? "°F" : "°C"}</span>
+              </div>
+            </div>
+
+            <div className="temperature-info">
+              <div className="location">
+                <h2>
+                  {weather[0].city}, {countryCodes[weather[0].country]}
+                </h2>
+                {/* <img src={`${weather[0].countryFlagsUrl}/${weather[0].country}/shiny/64.png`} alt=""/> */}
+              </div>
+              <h4 style={{ textTransform: "capitalize" }}>
+                <span>Timezone:</span> {weather[0].zoneName}
+              </h4>
+              <h4 style={{ textTransform: "capitalize" }}>
+                <span>Weather:</span> {weather[0].weatherDescription}
+              </h4>
+              <h4>
+                <span>Wind Speed:</span> {weather[0].windSpeed} km/h
+              </h4>
+              <h4>
+                <span>Humidity:</span> {weather[0].humidity}%
+              </h4>
+              <h4>
+                <span>Date:</span> {weather[0].displayTime}
+              </h4>
+            </div>
+          </>
+        ) : (
+          ""
+        )}
       </div>
     </main>
   );

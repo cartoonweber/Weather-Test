@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import History from "./pages/History";
 import { Header } from "./components/Header";
+import axios from "axios";
 
 export type Coords = {
   latitude: number;
@@ -17,9 +18,22 @@ type Location = {
   timestamp: number;
 };
 
+const countryCodeEndpoint = "https://raw.githubusercontent.com/jgudo/react-weather-app/master/static/country-code.json";
+
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const [theme, setTheme] = React.useState<boolean>(true);
+  const [countryCodes, setCountryCodes] = React.useState([]);
+
+  async function fetchCountryList() {
+    try {
+      const requestCountryCode = await fetch(countryCodeEndpoint);
+      const countryCode = await requestCountryCode.json();
+      setCountryCodes(countryCode);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   React.useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -34,6 +48,7 @@ const App: React.FC = () => {
         dispatch(getWeather(coords));
       }
     );
+    fetchCountryList();
   }, []);
 
   React.useEffect(() => {
@@ -44,7 +59,7 @@ const App: React.FC = () => {
     <>
       <Header theme={theme} setTheme={setTheme} />
       <Routes>
-        <Route path="/" element={<Home theme={theme} />} />
+        <Route path="/" element={<Home theme={theme} countryCodes={countryCodes} />} />
 
         <Route path="/history" element={<History theme={theme} />} />
       </Routes>

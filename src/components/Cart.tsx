@@ -1,6 +1,5 @@
 import axios from "axios";
 import React from "react";
-import getIcon from "../helpers/getIcon";
 import { useAppDispatch } from "../hooks/hooks";
 import { addWeather } from "../store/slices/savedSlice";
 import { WeatherResponse } from "../types";
