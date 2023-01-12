@@ -48,7 +48,7 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
           <div>
             <Weather>
               <WeatherWrapper>
-                <img src={weather.weatherLogo} alt={""} />
+                <img src={weather.weatherLogo} alt={""} className={"min-w-[120px]"} />
                 <div className="relative text-right">
                   <h1 className="text-[48px] font-bold my-6">{isCelcius ? `${weather.tempCelcius} °C` : `${weather.tempFahrenheit} °F`}</h1>
                   <TemperatureToggle
@@ -65,7 +65,7 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
               <TemperatureInfo>
                 <Location>
                   <h2 className={"my-5"}>
-                    {weather.city}, {countryCodes[weather.country]}
+                    {weather.city}, {weather.country}
                   </h2>
                 </Location>
                 <h4 className={"my-4 capitalize"}>
@@ -82,8 +82,8 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
                 </h4>
               </TemperatureInfo>
             </Weather>
-            <div>
-              <DailyInfoCard data={weather} isCelcius={isCelcius} />
+            <div className="flex justify-center mt-10">
+              <DailyInfoCard data={weather.forecast} isCelcius={isCelcius} />
             </div>
           </div>
         ) : (

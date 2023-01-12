@@ -68,7 +68,7 @@ export const getWeather = createAsyncThunk(
           displayTime: weather.current.last_updated,
           searchStatus: undefined,
           isSearching: false,
-          forecast: weather.forcast.forcastday,
+          forecast: weather.forecast.forecastday,
           loaded: true
         }
         if (temp) {

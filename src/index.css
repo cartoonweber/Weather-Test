@@ -9,3 +9,8 @@
   font-size: 16px;
   font-family: "Roboto";
 }
+body {
+  background: url("https://cdn.weatherapi.com/weather-widget/img/weatherapi-backgrounds/4_widget3.png");
+  background-size: 100% 100%;
+  min-height: 100vh;
+}

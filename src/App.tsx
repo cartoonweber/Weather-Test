@@ -34,17 +34,22 @@ const App: React.FC = () => {
     }
   }
 
+  async function fetchWeatherByIP() {
+    const ipdataApiKey = "2efa6ba99cac072c204b5778b85b65b3df711edd1db8682afbfb4f01";
+    const ipdataEndpoint = `https://api.ipdata.co/?api-key=${ipdataApiKey}`;
+    const requestLocation = await fetch(ipdataEndpoint);
+    const location = await requestLocation.json();
+
+    dispatch(getWeather(location));
+  }
+
   React.useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (response: Location) => {
         dispatch(getWeather(response.coords));
       },
       (error: any) => {
-        const coords = {
-          latitude: 37.450001,
-          longitude: 12.523333,
-        };
-        dispatch(getWeather(coords));
+        fetchWeatherByIP();
       }
     );
     fetchCountryList();
