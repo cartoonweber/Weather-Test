@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import React, { useEffect } from "react";
 import { Input } from "../components/Input";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { getWeather } from "../async/getWeather";
@@ -7,6 +7,7 @@ import { debounce } from "lodash";
 import { weatherbitIcons } from "../helpers/getIcon";
 import styled from "styled-components";
 import DailyInfoCard from "./DailyInfoCard";
+import PerformanceChart from "./PerformanceChart";
 
 type IHome = {
   theme: boolean;
@@ -16,6 +17,8 @@ type IHome = {
 const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
   const [value, setValue] = React.useState<string>("");
   const [isCelcius, setIsCelcius] = React.useState(false);
+  const [chartIndex, setChartIndex] = React.useState(0);
+  const [chartData, setChartData] = React.useState([]);
   const dispatch = useAppDispatch();
   const { weather } = useAppSelector((state) => state.weather);
   // const { savedWeather } = useAppSelector((state) => state.saved);
@@ -26,7 +29,6 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
   // });
   const searchHandler = React.useCallback(
     debounce((e) => {
-      console.log("DDDDD");
       dispatch(getWeather(e));
     }, 1000),
     []
@@ -37,6 +39,19 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
   }, []);
 
   console.log(weather);
+
+  useEffect(() => {
+    if (!weather) return;
+    let _data: any = [];
+    for (let i = 0; i < weather.forecast[chartIndex].hour.length; i++)
+      _data.push(
+        isCelcius
+          ? weather.forecast[chartIndex].hour[i].temp_c
+          : weather.forecast[chartIndex].hour[i].temp_f
+      );
+    setChartData(_data);
+  }, [isCelcius, chartIndex, weather]);
+
   return (
     <main className={theme ? "dark" : ""}>
       <div className="font-bold text-gray-100  max-w-screen-xl mx-auto px-4 lg:px-6 flex flex-col items-center py-10">
@@ -48,9 +63,12 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
           <div>
             <Weather>
               <WeatherWrapper>
-                <img src={weather.weatherLogo} alt={""} className={"min-w-[120px]"} />
+                {/* <img src={weather.weatherLogo} alt={""} className={"min-w-[120px]"} /> */}
+                <img src={"/climate.webp"} alt={""} className={"min-w-[120px]"} />
                 <div className="relative text-right">
-                  <h1 className="text-[48px] font-bold my-6">{isCelcius ? `${weather.tempCelcius} °C` : `${weather.tempFahrenheit} °F`}</h1>
+                  <h1 className="text-[48px] font-bold my-6">
+                    {isCelcius ? `${weather.tempCelcius} °C` : `${weather.tempFahrenheit} °F`}
+                  </h1>
                   <TemperatureToggle
                     style={{
                       color: isCelcius ? "rgba(255, 255, 255, .7)" : "#adff2f",
@@ -83,7 +101,18 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
               </TemperatureInfo>
             </Weather>
             <div className="flex justify-center mt-10">
-              <DailyInfoCard data={weather.forecast} isCelcius={isCelcius} />
+              <DailyInfoCard
+                data={weather.forecast}
+                isCelcius={isCelcius}
+                index={chartIndex}
+                setIndex={setChartIndex}
+              />
+            </div>
+            <div className="mt-8">
+              <div className="flex justify-end text-2xl ">{weather.forecast[chartIndex].date}</div>
+              <div style={{ marginTop: "-15px" }}>
+                <PerformanceChart data={chartData} />
+              </div>
             </div>
           </div>
         ) : (

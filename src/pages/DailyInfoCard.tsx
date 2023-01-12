@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import styled from "styled-components";
 
-const DailyInfoCard = ({ data, isCelcius }: any) => {
+const DailyInfoCard = ({ data, isCelcius, index, setIndex }: any) => {
   const day: any = {
     0: "Sun",
     1: "Mon",
@@ -19,9 +19,14 @@ const DailyInfoCard = ({ data, isCelcius }: any) => {
         const dayCode = moment(data.date).day();
         return (
           index !== 0 && (
-            <StyledItem className="flex items-center flex-col cursor-pointer transition" key={data.ts}>
+            <StyledItem
+              className="flex items-center flex-col cursor-pointer transition"
+              key={data.ts}
+              onClick={() => setIndex(index)}
+            >
               <h5 className="forecast-date">{day[dayCode]}</h5>
-              <img src={data.day.condition.icon} alt={""} />
+              {/* <img src={data.day.condition.icon} alt={""} /> */}
+              <img src={'/climate.webp'} alt={""} />
               <h2 className="forecast-temp">
                 {isCelcius ? data.day.avgtemp_c : Math.round(data.day.avgtemp_c * (9 / 5) + 32)}
                 <span>°</span>
