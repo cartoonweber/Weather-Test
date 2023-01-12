@@ -9,31 +9,73 @@ import styled from "styled-components";
 import DailyInfoCard from "./DailyInfoCard";
 import PerformanceChart from "./PerformanceChart";
 import useRefresh from "../hooks/useRefresh";
+import { Coords } from "../App";
 
 type IHome = {
   theme: boolean;
   countryCodes: any;
+  value: any;
+  setValue: any;
 };
 
-const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
-  const [value, setValue] = React.useState<string>("");
+
+type Location = {
+  coords: Coords;
+  timestamp: number;
+};
+
+const Home: React.FC<IHome> = ({ theme, countryCodes, value, setValue }) => {
   const [isCelcius, setIsCelcius] = React.useState(false);
   const [chartIndex, setChartIndex] = React.useState(0);
   const [chartData, setChartData] = React.useState([]);
+  const [prevValue, setPrevValue] = React.useState<string>("");
+  const [allowLPermission, setAllowLPermission] = React.useState<any>();
+  const [IPLocation, setIPLocation] = React.useState<any>();
+
   const dispatch = useAppDispatch();
-  const { weather } = useAppSelector((state) => state.weather);
   const { fastRefresh } = useRefresh();
-  // const { savedWeather } = useAppSelector((state) => state.saved);
-  // const findWeather = savedWeather.find((el) => {
-  //   if (el.name === (weather?.name as string)) {
-  //     return true;
-  //   }
-  // });
+  const { status, weather } = useAppSelector((state) => state.weather);
+
+  async function fetchWeatherByIP() {
+    const ipdataApiKey = "2efa6ba99cac072c204b5778b85b65b3df711edd1db8682afbfb4f01";
+    const ipdataEndpoint = `https://api.ipdata.co/?api-key=${ipdataApiKey}`;
+    const requestLocation = await fetch(ipdataEndpoint);
+    const location = await requestLocation.json();
+
+    setIPLocation(location);
+  }
+
+  React.useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (response: Location) => {
+        setAllowLPermission(response.coords);
+      },
+      (error: any) => {
+      }
+    );
+    fetchWeatherByIP();
+  }, []);
+
 
   useEffect(() => {
-    dispatch(getWeather(value));
+    if (typeof value === 'object' ? !value : !value.length) return;
+    if (status === "pending") return;
+    if (status === "rejected") {
+      if (prevValue === value) return;
+      else {
+        console.log(value);
+        dispatch(getWeather(value));
+      }
+    }
+    else {
+      console.log(value);
+      dispatch(getWeather(value));
+    }
   }, [fastRefresh, value]);
 
+  useEffect(() => {
+    if (status === 'rejected') { if (prevValue !== value) setPrevValue(value) }
+  }, [status])
   const onChangeInput = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   }, []);
@@ -41,19 +83,18 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
   useEffect(() => {
     if (!weather) return;
     let _data: any = [];
-    for (let i = 0; i < weather.forecast[chartIndex].hour.length; i++)
-      _data.push(
-        isCelcius
-          ? weather.forecast[chartIndex].hour[i].temp_c
-          : weather.forecast[chartIndex].hour[i].temp_f
-      );
+    for (let i = 0; i < weather.forecast[chartIndex].hour.length; i++) _data.push(isCelcius ? weather.forecast[chartIndex].hour[i].temp_c : weather.forecast[chartIndex].hour[i].temp_f);
     setChartData(_data);
   }, [isCelcius, chartIndex, weather]);
 
   return (
     <main className={theme ? "dark" : ""}>
       <div className="font-bold text-gray-100  max-w-screen-xl mx-auto px-3 lg:px-6 flex flex-col items-center py-10">
-        <div className="w-[300px]">
+        {allowLPermission ?
+          <div className="text-[#2FD35D] font-normal">You Enabled Google Location Permission <span className="font-bold underline cursor-pointer" onClick={() => setValue(allowLPermission)}>Location Info</span></div> : ''
+        }
+        {!allowLPermission && IPLocation ? <div className="text-[#ea3943] font-normal">You Disabled Google Location Permission <span className="font-bold underline cursor-pointer" onClick={() => setValue(IPLocation)}>Location Info By IP Address</span></div> : ''}
+        <div className="w-full max-w-[300px] mt-3">
           <Input theme={theme} value={value} onChangeInput={onChangeInput} />
         </div>
 
@@ -64,9 +105,7 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
                 <img src={weather.weatherLogo} alt={""} className={"min-w-[120px]"} />
                 {/* <img src={"/climate.webp"} alt={""} className={"min-w-[120px]"} /> */}
                 <div className="relative text-right">
-                  <h1 className="font-bold my-6">
-                    {isCelcius ? `${weather.tempCelcius} °C` : `${weather.tempFahrenheit} °F`}
-                  </h1>
+                  <h1 className="font-bold my-6">{isCelcius ? `${weather.tempCelcius} °C` : `${weather.tempFahrenheit} °F`}</h1>
                   <TemperatureToggle
                     style={{
                       color: isCelcius ? "rgba(255, 255, 255, .7)" : "#adff2f",
@@ -99,12 +138,7 @@ const Home: React.FC<IHome> = ({ theme, countryCodes }) => {
               </TemperatureInfo>
             </Weather>
             <div className="flex justify-center mt-10">
-              <DailyInfoCard
-                data={weather.forecast}
-                isCelcius={isCelcius}
-                index={chartIndex}
-                setIndex={setChartIndex}
-              />
+              <DailyInfoCard data={weather.forecast} isCelcius={isCelcius} index={chartIndex} setIndex={setChartIndex} />
             </div>
             <div className="mt-8">
               <div className="flex justify-end text-2xl">{weather.forecast[chartIndex].date}</div>
@@ -202,6 +236,9 @@ const TemperatureInfo = styled.div`
     }
   }
 
+  @media (max-width: 400px) {
+    padding-left : 0;
+  }
   @media (max-width: 600px) {
     font-size: 13px;
   }

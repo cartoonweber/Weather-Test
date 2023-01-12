@@ -33,18 +33,16 @@ export const Header: React.FC<IHeader> = ({ theme, setTheme }) => {
             <NavLink to="/">
               <img className="mr-6 h-10" src={icon} alt="" />
             </NavLink>
-            <span className="font-bold text-xl dark:text-white text-gray-800dark:border-gray-200 block lg:hidden">
-              {getPath()}
-            </span>
+            <span className="font-bold text-xl dark:text-white text-gray-800dark:border-gray-200 block lg:hidden">{getPath()}</span>
           </div>
           <div className="hidden lg:flex">
             <ul className="flex font-medium space-x-8 dark:text-gray-200 text-gray-700">
-              <li className="block">
+              {/* <li className="block">
                 <CustomLink to="/" children="Home" />
-              </li>
-              <li className="block">
+              </li> */}
+              {/* <li className="block">
                 <CustomLink to="history" children="History" />
-              </li>
+              </li> */}
             </ul>
           </div>
           <div className="flex items-center gap-4">
@@ -58,7 +56,7 @@ export const Header: React.FC<IHeader> = ({ theme, setTheme }) => {
                 </a>
               </button>
               <button></button>
-              <button className="transition-all" onClick={() => setTheme(!theme)}>
+              {/* <button className="transition-all" onClick={() => setTheme(!theme)}>
                 {theme ? (
                   <TbSunOff
                     className="h-5 w-6 dark:text-gray-400
@@ -70,7 +68,7 @@ export const Header: React.FC<IHeader> = ({ theme, setTheme }) => {
                   transition-all text-gray-700 dark:hover:text-gray-100 hover:text-gray-900"
                   />
                 )}
-              </button>
+              </button> */}
             </div>
 
             <button
@@ -78,12 +76,7 @@ export const Header: React.FC<IHeader> = ({ theme, setTheme }) => {
               className="p-2 block lg:hidden text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700
       transition-all focus:outline-none focus:ring-2 focus:ring-gray-400"
             >
-              <svg
-                className="w-6 h-6"
-                fill={theme ? "#FFFFFF" : "#000000"}
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg className="w-6 h-6" fill={theme ? "#FFFFFF" : "#000000"} viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path>
               </svg>
             </button>
@@ -93,18 +86,14 @@ export const Header: React.FC<IHeader> = ({ theme, setTheme }) => {
           <div className="dark:text-gray-100 text-gray-700 max-w-screen-xl mx-auto block lg:hidden font-semibold fixed w-full">
             <ul className="flex-col px-4 bg-white dark:bg-[#1F2937] w-full shadow-md">
               <li className="py-2 dark:hover:text-[#1956db] hover:text-gray-900 w-full cursor-pointer transition-all">
-                <NavLink
-                  className="flex items-center space-x-2"
-                  onClick={() => setBurger((prev) => !prev)}
-                  to="/"
-                >
+                <NavLink className="flex items-center space-x-2" onClick={() => setBurger((prev) => !prev)} to="/">
                   <button className="flex items-center space-x-2">
                     <FaHome />
                     <span>Home</span>
                   </button>
                 </NavLink>
               </li>
-              <li className="py-2 dark:hover:text-[#1956db] hover:text-gray-900 w-full cursor-pointer transition-all">
+              {/* <li className="py-2 dark:hover:text-[#1956db] hover:text-gray-900 w-full cursor-pointer transition-all">
                 <NavLink
                   className="flex items-center space-x-2"
                   onClick={() => setBurger((prev) => !prev)}
@@ -115,7 +104,7 @@ export const Header: React.FC<IHeader> = ({ theme, setTheme }) => {
                     <span>History</span>
                   </button>
                 </NavLink>
-              </li>
+              </li> */}
             </ul>
           </div>
         )}

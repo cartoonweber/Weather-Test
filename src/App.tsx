@@ -12,17 +12,14 @@ export type Coords = {
   longitude: number;
 };
 
-type Location = {
-  coords: Coords;
-  timestamp: number;
-};
 
 const countryCodeEndpoint = "https://raw.githubusercontent.com/jgudo/react-weather-app/master/static/country-code.json";
 
 const App: React.FC = () => {
-  const dispatch = useAppDispatch();
   const [theme, setTheme] = React.useState<boolean>(true);
   const [countryCodes, setCountryCodes] = React.useState([]);
+  const [value, setValue] = React.useState<any>("");
+
 
   async function fetchCountryList() {
     try {
@@ -34,38 +31,22 @@ const App: React.FC = () => {
     }
   }
 
-  async function fetchWeatherByIP() {
-    const ipdataApiKey = "2efa6ba99cac072c204b5778b85b65b3df711edd1db8682afbfb4f01";
-    const ipdataEndpoint = `https://api.ipdata.co/?api-key=${ipdataApiKey}`;
-    const requestLocation = await fetch(ipdataEndpoint);
-    const location = await requestLocation.json();
-
-    dispatch(getWeather(location));
-  }
-
-  React.useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (response: Location) => {
-        dispatch(getWeather(response.coords));
-      },
-      (error: any) => {
-        fetchWeatherByIP();
-      }
-    );
-    fetchCountryList();
-  }, []);
 
   React.useEffect(() => {
     document.body.style.backgroundColor = theme ? "#101827" : "#DDDDDD";
   }, [theme]);
 
+  React.useEffect(() => {
+    fetchCountryList();
+  }, []);
+
   return (
     <>
       <Header theme={theme} setTheme={setTheme} />
       <Routes>
-        <Route path="/" element={<Home theme={theme} countryCodes={countryCodes} />} />
+        <Route path="/" element={<Home theme={theme} countryCodes={countryCodes} value={value} setValue={setValue} />} />
 
-        <Route path="/history" element={<History theme={theme} />} />
+        {/* <Route path="/history" element={<History theme={theme}  />} /> */}
       </Routes>
     </>
   );

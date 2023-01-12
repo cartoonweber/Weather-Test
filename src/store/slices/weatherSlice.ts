@@ -29,6 +29,7 @@ const weatherSlice = createSlice({
           state.weather = action.payload;
           state.status = null;
           state.isMounted = true;
+          state.status = 'fulfilled';
         }
       } else {
         if (action.payload) {
